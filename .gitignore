@@ -1,0 +1,22 @@
+def word_counter(txt)
+	txt = txt.downcase.scan(/[\S]+/)
+	h = Hash.new(0)
+
+	str = ""
+	i = 0
+	alph = "a".ord + (i % 26)
+
+	txt.each { |elmt| h[elmt] += 1 }
+	
+	h.each do |k, v| 
+		i += 1
+		(i/26).times { str = str.concat((alph).chr) }
+		puts("#{str}. #{k} \t{#{v}:loc (1), loc (2)}")
+	end
+end
+
+written = """Given an arbitrary text document written in English, write a program that will generate a
+concordance, i.e. an alphabetical list of all word occurrences, labeled with word frequencies.
+Bonus: label each word with the sentence numbers in which each occurrence appeared.
+"""
+word_counter(written)
