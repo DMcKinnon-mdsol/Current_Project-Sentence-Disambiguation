@@ -1,4 +1,8 @@
-require "tactful_tokenizer"
+#require "tactful_tokenizer"
+require "pragmatic_segmenter/version"
+require "pragmatic_segmenter/segmenter"
+# need to work on this...not sure why it isn't working. Where did you get it from?
+# how is it used?
 
 def word_counter
 	# Lists words, their frequency, and location based on sentences from given text doc.
@@ -14,8 +18,10 @@ def word_counter
 	h = Hash.new(0); i = 0;	alph = "a".ord; arr = []
 	
 	#	tactful_tokenizer from https://github.com/zencephalon/Tactful_Tokenizer
-	m = TactfulTokenizer::Model.new
-
+#	m = TactfulTokenizer::Model.new
+	ps = PragmaticSegmenter::Cleaner.new(text: File.open(ARGV[0], doc_type: 'pdf'))
+	ps.clean
+=begin	
 	# Testing to make sure the arg after program name is a txt file that exists
 	case 
 	when ARGV[0].nil?
@@ -28,7 +34,8 @@ def word_counter
 		exit(0)
 	when ARGV[0].to_s.scan(/[.txt']/)
 #		txt = File.open(ARGV[0], "r+")
-		arr = m.tokenize_text(File.open(ARGV[0], "r+"))
+#		arr = m.tokenize_text(File.open(ARGV[0], "r+"))
+#		arr = ps(File.open(ARGV[0], "r+"))
 	else
 		puts "Something is wrong."
 		puts "Exitting program"
@@ -36,11 +43,8 @@ def word_counter
 	end
 	
 	arr.map! {|elmt| elmt.downcase }
-	arr.each_with_index do |elmt, i| 
-		elmt.each do |inner_elmt| 
-			h[inner_elmt.scan(/[\w']+/)] += 1
-			p i
-		end
+	arr.each do |pot_sentence| 
+			h[pot_sentence.scan(/[\w']+/)] += 1
 	end
 	#.sort.each {|elmt| h[elmt] +=1}
 p	h
@@ -68,5 +72,4 @@ p	h
 	end
 =end
 end
-var = """given text"""
-word_counter
+var = ""
