@@ -1,25 +1,55 @@
+require "tactful_tokenizer"
 
-def word_counter #(txt)
-# 	Add in new alternative to failure
+def word_counter
+	# Lists words, their frequency, and location based on sentences from given text doc.
+	# Right now...
+	# The way the file is opened and read, it could freeze the host if file is too big.
+	# I need to figure out a way to get the location of every word.
+	# Will not work with languages other than English
+	#
+	# Created 9/16/2015
+	# Author: Christopher G Manna
+	
+	# setting new values
+	h = Hash.new(0); i = 0;	alph = "a".ord; arr = []
+	
+	#	tactful_tokenizer from https://github.com/zencephalon/Tactful_Tokenizer
+	m = TactfulTokenizer::Model.new
 
-	if ARGV[0].nil?
+	# Testing to make sure the arg after program name is a txt file that exists
+	case 
+	when ARGV[0].nil?
 		puts "Please enter a filename following the program name."
 		puts "Exitting Program"
 		exit(0)
+	when !(File.exist?(ARGV[0]))
+		puts "Could not find file #{ARGV[0]}"
+		puts "Exitting Program"
+		exit(0)
+	when ARGV[0].to_s.scan(/[.txt']/)
+#		txt = File.open(ARGV[0], "r+")
+		arr = m.tokenize_text(File.open(ARGV[0], "r+"))
 	else
-		txt = File.open(ARGV[0], "r+")
+		puts "Something is wrong."
+		puts "Exitting program"
+		exit(0)
 	end
-#	figure out how tokenizer works
-#	m = TactfulTokenizer::Model.new
-#	p m.tokenize_text("Given an arbitrary text document written in English, write a program that will generate a concordance, i.e. an alphabetical list of all word occurrences, labeled with word frequencies. Bonus: label each word with the sentence numbers in which each occurrence appeared.")
-
-	h = Hash.new(0); i = 0;	alph = "a".ord 
-		# setting new values
-		
-	txt = txt.read.downcase.scan(/[\w']+/).sort.each {|elmt| h[elmt] +=1}
+	
+	arr.map! {|elmt| elmt.downcase }
+	arr.each_with_index do |elmt, i| 
+		elmt.each do |inner_elmt| 
+			h[inner_elmt.scan(/[\w']+/)] += 1
+			p i
+		end
+	end
+	#.sort.each {|elmt| h[elmt] +=1}
+p	h
+=begin	
+	#txt.read.downcase.scan(/[\w']+/).sort.each {|elmt| h[elmt] +=1}
 		# finding word without gramatical interruption and sorting vals
 		# finding frequency for each word that appears and storing in hash
-
+	txt.close
+	
 	val = (h.keys.max_by(&:length)).length + 10
 		# setting indent length for table formatting
 
@@ -27,15 +57,16 @@ def word_counter #(txt)
 		# title of printed table, 
 	h.each do |k, v| 
 		str = "" # resetting alpha value so as not to include previous
+		
 		((i / 26)+1).times {str += (alph + (i % 26)).chr}
 			# dynamically increase list alphabetically and roll over at end of alpha
+		
 		printf("%s. %-#{val - str.length}s{%s:loc(1), loc(2), etc}\n", str,k,v) 
 			# dynamically create output table
 		i += 1
 			# increment through alpha
 	end
+=end
 end
-var = """Given an arbitrary text document written in English, write a program that will generate a
-concordance, i.e. an alphabetical list of all word occurrences, labeled with word frequencies.
-Bonus: label each word with the sentence numbers in which each occurrence appeared."""
+var = """given text"""
 word_counter
