@@ -1,27 +1,13 @@
-#require "tactful_tokenizer"
-require "pragmatic_segmenter/version"
-require "pragmatic_segmenter/segmenter"
-# need to work on this...not sure why it isn't working. Where did you get it from?
-# how is it used?
+require 'pragmatic_segmenter'
 
 def word_counter
 	# Lists words, their frequency, and location based on sentences from given text doc.
-	# Right now...
-	# The way the file is opened and read, it could freeze the host if file is too big.
-	# I need to figure out a way to get the location of every word.
-	# Will not work with languages other than English
-	#
 	# Created 9/16/2015
 	# Author: Christopher G Manna
 	
 	# setting new values
-	h = Hash.new(0); i = 0;	alph = "a".ord; arr = []
-	
-	#	tactful_tokenizer from https://github.com/zencephalon/Tactful_Tokenizer
-#	m = TactfulTokenizer::Model.new
-	ps = PragmaticSegmenter::Cleaner.new(text: File.open(ARGV[0], doc_type: 'pdf'))
-	ps.clean
-=begin	
+	h = Hash.new(0); i = 0;	alph = "a".ord; pot_sentences = []
+
 	# Testing to make sure the arg after program name is a txt file that exists
 	case 
 	when ARGV[0].nil?
@@ -33,21 +19,25 @@ def word_counter
 		puts "Exitting Program"
 		exit(0)
 	when ARGV[0].to_s.scan(/[.txt']/)
-#		txt = File.open(ARGV[0], "r+")
-#		arr = m.tokenize_text(File.open(ARGV[0], "r+"))
-#		arr = ps(File.open(ARGV[0], "r+"))
+		# https://github.com/diasks2/pragmatic_segmenter
+		# GitHub UN: diasks2
+		txt = File.open(ARGV[0], "r+")
+		ps = PragmaticSegmenter::Segmenter.new(text: txt.read)
+		pot_sentences = ps.segment
+		txt.close
 	else
 		puts "Something is wrong."
 		puts "Exitting program"
 		exit(0)
 	end
 	
-	arr.map! {|elmt| elmt.downcase }
-	arr.each do |pot_sentence| 
-			h[pot_sentence.scan(/[\w']+/)] += 1
-	end
+	pot_sentences.map! {|elmt| elmt.downcase }
+	arr = []
+	pot_sentences.each { |sentence| arr << sentence.scan(/^\S*\.\S*$/)}#/[\w']+/)}
+	.sort.each {|word| h[word] += 1 }#breakdown.split(/^\S*\.\S*$/)}} #
+	#end
 	#.sort.each {|elmt| h[elmt] +=1}
-p	h
+p	arr
 =begin	
 	#txt.read.downcase.scan(/[\w']+/).sort.each {|elmt| h[elmt] +=1}
 		# finding word without gramatical interruption and sorting vals
