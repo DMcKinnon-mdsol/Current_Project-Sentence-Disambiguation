@@ -2,11 +2,19 @@ require 'pragmatic_segmenter'
 
 def word_counter
 	# Lists words, their frequency, and location based on sentences from given text doc.
+	# Right now...
+	# The way the file is read, it could freeze the host if file given is too big.
+	# Will not work with languages other than English
+	#
+	# 	tried tactful_tokenizer but it was not accurate enough.
+	#	tactful_tokenizer from https://github.com/zencephalon/Tactful_Tokenizer
+	#	m = TactfulTokenizer::Model.new
+	#
 	# Created 9/16/2015
 	# Author: Christopher G Manna
 	
 	# setting new values
-	h = Hash.new(0); i = 0;	alph = "a".ord; pot_sentences = []
+	h = Hash.new(0); i = 0;	alph = "a".ord; pot_sentences = []; words = [];
 
 	# Testing to make sure the arg after program name is a txt file that exists
 	case 
@@ -30,21 +38,42 @@ def word_counter
 		puts "Exitting program"
 		exit(0)
 	end
+
+	# http://stackoverflow.com/questions/25454391/regex-match-that-will-ignore-punctuation-within-the-string
+#	pot_sentences[0].downcase.gsub!(/[^\w\s]/, '')
+	# I've decided to remove all punctuation from each tokenized sentence
+	# so that I can count the values. I realize that many hyphened words will
+	# not be calculated properly, such as we're vs were but I could not find a 
+	# word tokenizer that made me feel confident in saying that words tokenized 
+	# from given sentences would be correctly tabulated anyway. I thought that
+	# words that are abbreviated, such as USA, would fit better against their 
+	# counterpart U.S.A. This also took care of the problem at the end 
+	# of each sentence, where punctuation could be a factor, as well as quotes or 
+	# parentheses. While it is not 100% accurate, I can say with more certainty 
+	# the returned values are either abbreviations etc, and IMO would be easier to read.
+	# I also recognize this is an unanswerable question as there are whole fields
+	# devoted to the disambiguation of sentences.
 	
-	pot_sentences.map! {|elmt| elmt.downcase }
-	arr = []
-	pot_sentences.each { |sentence| arr << sentence.scan(/^\S*\.\S*$/)}#/[\w']+/)}
-	.sort.each {|word| h[word] += 1 }#breakdown.split(/^\S*\.\S*$/)}} #
-	#end
-	#.sort.each {|elmt| h[elmt] +=1}
-p	arr
-=begin	
-	#txt.read.downcase.scan(/[\w']+/).sort.each {|elmt| h[elmt] +=1}
-		# finding word without gramatical interruption and sorting vals
-		# finding frequency for each word that appears and storing in hash
-	txt.close
+	# replacing everything that is not a word with no space
+	pot_sentences.map! { |elmt| elmt.downcase.gsub!(/[^\w\s]/, '') }
+
+	# finding word without gramatical interruption and sorting vals
+	# finding frequency for each word that appears and storing in hash
+	pot_sentences.join(" ").scan(/[\w']+/).sort.each { |elmt| words << elmt }
 	
-	val = (h.keys.max_by(&:length)).length + 10
+	words.uniq.each do |word|
+		freq = 0 
+		loc = []
+		pot_sentences.each_with_index do |sentence, i|
+			if sentence.include?(word)
+				freq += 1
+				loc << i
+			end
+		end
+		h[word] = [freq, loc.join(", ")]
+	end
+
+	val = (h.keys.max_by(&:length)).length + 30
 		# setting indent length for table formatting
 
 	printf "%-#{val + 1}s %s\n","Word List","Frequency & Locations"
@@ -55,11 +84,10 @@ p	arr
 		((i / 26)+1).times {str += (alph + (i % 26)).chr}
 			# dynamically increase list alphabetically and roll over at end of alpha
 		
-		printf("%s. %-#{val - str.length}s{%s:loc(1), loc(2), etc}\n", str,k,v) 
+		printf("%s. %-#{val - str.length}s{%s:%s}\n", str,k,v[0],v[1]) 
 			# dynamically create output table
 		i += 1
 			# increment through alpha
 	end
-=end
 end
-var = ""
+word_counter
