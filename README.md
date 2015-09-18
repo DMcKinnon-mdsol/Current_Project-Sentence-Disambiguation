@@ -1,19 +1,11 @@
 # word-counter
-counts words given arbitrary text document
-I have more information to put in here.
-Lists words, their frequency, and location based on sentences from given text doc.
-  # Right now...
-  # The way the file is opened and read, it could freeze the host if file is too big.
-  # I need to figure out a way to get the location of every word.
-  # Will not work with languages other than English
-  #
-  # 	tried tactful_tokenizer but it was not accurate enough.
-  #	tactful_tokenizer from https://github.com/zencephalon/Tactful_Tokenizer
-  #	m = TactfulTokenizer::Model.new
+Lists words, the frequency in which they appear, and location based on sentence number from given text doc.
+Issues right now...The way the file is opened and read, it could freeze the host if file is too big. Will not work with languages other than English. Will not show how many times a given word will show up in which line.
 
+I decided to take all punctuation out of the given text...explanation below:
 
 	# http://stackoverflow.com/questions/25454391/regex-match-that-will-ignore-punctuation-within-the-string
- #	pot_sentences[0].downcase.gsub!(/[^\w\s]/, '')
+ #	pot_sentences.downcase.gsub!(/[^\w\s]/, '')
 	# I've decided to remove all punctuation from each tokenized sentence
 	# so that I can count the values. I realize that many hyphened words will
 	# not be calculated properly, also words with apostrophes such as we're vs 
@@ -24,5 +16,3 @@ Lists words, their frequency, and location based on sentences from given text do
 	# of each sentence, where punctuation could be a factor, as well as quotes or 
 	# parentheses. While it is not 100% accurate, I can say with more certainty and 
 	# better understanding what words will be returned and IMO would be easier to read.
-	# I also recognize this is an unanswerable question as there are whole fields
-	# devoted to the disambiguation of sentences.
