@@ -1,6 +1,6 @@
 # word-counter
 Lists words, the frequency in which they appear, and location based on sentence number from given text doc.
-Issues right now...The way the file is opened and read, it could freeze the host if file is too big. Will not work with languages other than English. Will not show how many times a given word will show up in which line.
+Issues right now...The way the file is opened and read, it could freeze the host if file is too big. Will not work with languages other than English. Will not show how many times a given word shows up in each line it's found.
 
 I decided to take all punctuation out of the given text...explanation below:
 
