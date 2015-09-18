@@ -1,14 +1,9 @@
 require 'pragmatic_segmenter'
 
 def word_counter
-	# Lists words, their frequency, and location based on sentences from given text doc.
-	# Right now...
+	# Lists words, their frequency, and location based on sentence # from given text doc.
 	# The way the file is read, it could freeze the host if file given is too big.
 	# Will not work with languages other than English
-	#
-	# 	tried tactful_tokenizer but it was not accurate enough.
-	#	tactful_tokenizer from https://github.com/zencephalon/Tactful_Tokenizer
-	#	m = TactfulTokenizer::Model.new
 	#
 	# Created 9/16/2015
 	# Author: Christopher G Manna
@@ -39,7 +34,7 @@ def word_counter
 		exit(0)
 	end
 	
-	# replacing everything that is not a word with no space
+	# replacing everything that is not a word with nothing
 	pot_sentences.map! { |elmt| elmt.downcase.gsub!(/[^\w\s]/, '') }
 
 	# finding word without gramatical interruption and sorting vals
@@ -52,17 +47,19 @@ def word_counter
 		pot_sentences.each_with_index do |sentence, i|
 			if sentence.include?(word)
 				freq += 1
-				loc << i
+				loc << i.to_i + 1
 			end
 		end
 		h[word] = [freq, loc.join(", ")]
 	end
-
-	val = (h.keys.max_by(&:length)).length + 30
-		# setting indent length for table formatting
-
+		
+	# setting indent length for table formatting based on the longest word length
+	# in the hash that has all the word keys.
+	val = (h.keys.max_by(&:length)).length + 30 + (h.size / 26)
+		
+	# title of printed table, 
 	printf "%-#{val + 1}s %s\n","Word List","Frequency & Locations"
-		# title of printed table, 
+
 	h.each do |k, v| 
 		str = "" # resetting alpha value so as not to include previous
 		
