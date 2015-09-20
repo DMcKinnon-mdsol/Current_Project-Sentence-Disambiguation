@@ -6,21 +6,25 @@ def word_counter
 	# Will not work with languages other than English
 	#
 	# Created 9/16/2015
-	# Author: Christopher G Manna
+	# Author: Nitro7777
+	# find a way to turn this into a class
 	
 	# setting new values
 	h = Hash.new(0); i = 0;	alph = "a".ord; pot_sentences = []; words = [];
 
 	# Testing to make sure the arg after program name is a txt file that exists
+	# need to make sure to start throwing/raising real error signs
 	case 
 	when ARGV[0].nil?
 		puts "Please enter a filename following the program name."
 		puts "Exitting Program"
 		exit(0)
+		# raise error no text file
 	when !(File.exist?(ARGV[0]))
 		puts "Could not find file #{ARGV[0]}"
 		puts "Exitting Program"
 		exit(0)
+		# raise error text file DNE in current directory
 	when ARGV[0].to_s.scan(/[.txt']/)
 		# https://github.com/diasks2/pragmatic_segmenter
 		# GitHub UN: diasks2
@@ -28,10 +32,12 @@ def word_counter
 		ps = PragmaticSegmenter::Segmenter.new(text: txt.read)
 		pot_sentences = ps.segment
 		txt.close
+		#
 	else
 		puts "Something is wrong."
 		puts "Exitting program"
 		exit(0)
+		# raise error - undefined problem
 	end
 	
 	# replacing everything that is not a word with nothing
