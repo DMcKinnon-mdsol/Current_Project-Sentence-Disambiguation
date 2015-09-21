@@ -1,6 +1,7 @@
 # word-counter
 Lists words, the frequency in which they appear, and location based on sentence number from given text doc.
-Issues right now...The way the file is opened and read, it could freeze the host if file is too big. Will not work with languages other than English. 
+Issues right now...The way the file is opened and read, it could freeze the host if file is too big. Will not work with languages other than English. It will not work with multi-line text docs - all text should be on one line and sentences
+should end with a period and a space.
 
 I decided to take all punctuation out of the given text...explanation below:
 
