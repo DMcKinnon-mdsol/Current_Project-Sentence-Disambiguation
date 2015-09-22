@@ -10,7 +10,10 @@ def word_counter
 	# find a way to turn this into a class
 	
 	# setting new values
-	h = Hash.new(0); i = 0;	alph = "a".ord; pot_sentences = []; words = [];
+	h = Hash.new(0)
+	i = 0
+	alph = "a".ord
+	pot_sentences, words = [], []
 
 	# Testing to make sure the arg after program name is a txt file that exists
 	# need to make sure to start throwing/raising real error signs
