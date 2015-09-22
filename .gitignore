@@ -20,7 +20,7 @@ def word_counter
 		puts "Exitting Program"
 		exit(0)
 		# raise error no text file
-	when !(File.exist?(ARGV[0]))
+	when unless File.exist?(ARGV[0])
 		puts "Could not find file #{ARGV[0]}"
 		puts "Exitting Program"
 		exit(0)
