@@ -35,7 +35,7 @@ def word_counter
 		ps = PragmaticSegmenter::Segmenter.new(text: txt.read)
 		pot_sentences = ps.segment
 		txt.close
-		#
+		# adjust here so that File Open closes automatically
 	else
 		puts "Something is wrong."
 		puts "Exitting program"
