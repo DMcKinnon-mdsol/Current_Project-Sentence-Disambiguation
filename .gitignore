@@ -50,7 +50,8 @@ def word_counter
 	# finding frequency for each word that appears and storing in hash
 	pot_sentences.join(" ").scan(/[\w']+/).sort.each { |elmt| words << elmt }
 	
-	words.uniq.each do |word|
+	poss_words = words.uniq
+	poss_words.each do |word|
 		freq = 0 
 		loc = []
 		pot_sentences.each_with_index do |sentence, i|
