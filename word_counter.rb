@@ -1,50 +1,44 @@
 require 'pragmatic_segmenter'
+# how do you include a gem such as this so that the program will run on a given computer?
 
 def word_counter
 	# Lists words, their frequency, and location based on sentence # from given text doc.
 	# The way the file is read, it could freeze the host if file given is too big.
 	# Will not work with languages other than English
 	#
-	# Created 9/16/2015
-	# Author: Nitro7777
+	# Started 9/16/2015
+	# Updated 2/14/2016
+	# Author: Christopher Gabriel Manna
 	# find a way to turn this into a class
 	
 	# setting new values
 	h = Hash.new(0)
 	i = 0
 	alph = "a".ord
-	pot_sentences, words = [], []
+	pot_sentences = []
+	words = []
+	
 
-	# Testing to make sure the arg after program name is a txt file that exists
-	# need to make sure to start throwing/raising real error signs
-	case 
-	when ARGV[0].nil?
-		puts "Please enter a filename following the program name."
-		puts "Exitting Program"
-		exit(0)
-		# raise error no text file
-	when !(File.exist?(ARGV[0]))
-		puts "Could not find file #{ARGV[0]}"
-		puts "Exitting Program"
-		exit(0)
-		# raise error text file DNE in current directory
-	when ARGV[0].to_s.scan(/[.txt']/)
+	file_name = ARGV[0]
+	if (File.extname(file_name).to_s == ".txt" && File.exist?(file_name))
 		# https://github.com/diasks2/pragmatic_segmenter
 		# GitHub UN: diasks2
-		txt = File.open(ARGV[0], "r+")
+		txt = File.open(file_name, "r+")
 		ps = PragmaticSegmenter::Segmenter.new(text: txt.read)
 		pot_sentences = ps.segment
 		txt.close
+		# pot_sentences
 		# adjust here so that File Open closes automatically
 	else
-		puts "Something is wrong."
-		puts "Exitting program"
+		puts "Something is wrong, please retry."
+		puts "Exitting Program."
 		exit(0)
-		# raise error - undefined problem
 	end
-	
+
+
 	# replacing everything that is not a word with nothing
 	pot_sentences.map! { |elmt| elmt.downcase.gsub!(/[^\w\s]/, '') }
+	# rewrite this
 
 	# finding word without gramatical interruption and sorting vals
 	# finding frequency for each word that appears and storing in hash
